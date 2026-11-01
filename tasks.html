@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart To-Do | Task Management</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"></polyline>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </div>
+        <div class="brand-title">Smart<span>ToDo</span></div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-label">Navigation</div>
+        <a href="index.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="9"></rect>
+            <rect x="14" y="3" width="7" height="5"></rect>
+            <rect x="14" y="12" width="7" height="9"></rect>
+            <rect x="3" y="16" width="7" height="5"></rect>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="tasks.html" class="nav-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>All Tasks</span>
+        </a>
+
+        <div class="nav-label" style="margin-top: 1rem;">Task Categories</div>
+        <a href="javascript:void(0)" onclick="quickFilterCategory('PERSONAL')" class="nav-link">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #ec4899;"></span>
+          <span>Personal</span>
+        </a>
+        <a href="javascript:void(0)" onclick="quickFilterCategory('EDUCATION')" class="nav-link">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #3b82f6;"></span>
+          <span>Education</span>
+        </a>
+        <a href="javascript:void(0)" onclick="quickFilterCategory('WORK')" class="nav-link">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #8b5cf6;"></span>
+          <span>Work</span>
+        </a>
+        <a href="javascript:void(0)" onclick="quickFilterCategory('HEALTH')" class="nav-link">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
+          <span>Health</span>
+        </a>
+        <a href="javascript:void(0)" onclick="quickFilterCategory('SHOPPING')" class="nav-link">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b;"></span>
+          <span>Shopping</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="theme-toggle-box">
+          <span>Theme Mode</span>
+          <button class="theme-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode">
+            <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Top Navigation Bar -->
+      <header class="top-bar">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+        <div class="page-title">
+          <h1>Task Management</h1>
+          <p>Organize, search, filter, and track all your tasks</p>
+        </div>
+        <div class="top-actions">
+          <button class="btn-add" id="openAddModalBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Add New Task</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Content Body -->
+      <main class="content-body">
+        <!-- Search and Filter Toolbar -->
+        <section class="task-toolbar">
+          <div class="search-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search tasks by title or keywords...">
+          </div>
+
+          <div class="filter-group">
+            <select id="filterStatus" class="custom-select" title="Filter by Status">
+              <option value="">All Statuses</option>
+              <option value="PENDING">Pending</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="COMPLETED">Completed</option>
+            </select>
+
+            <select id="filterPriority" class="custom-select" title="Filter by Priority">
+              <option value="">All Priorities</option>
+              <option value="HIGH">High Priority</option>
+              <option value="MEDIUM">Medium Priority</option>
+              <option value="LOW">Low Priority</option>
+            </select>
+
+            <select id="filterCategory" class="custom-select" title="Filter by Category">
+              <option value="">All Categories</option>
+              <option value="PERSONAL">Personal</option>
+              <option value="EDUCATION">Education</option>
+              <option value="WORK">Work</option>
+              <option value="SHOPPING">Shopping</option>
+              <option value="HEALTH">Health</option>
+              <option value="OTHERS">Others</option>
+            </select>
+
+            <select id="sortField" class="custom-select" title="Sort by">
+              <option value="dueDate-asc">Due Date (Earliest First)</option>
+              <option value="dueDate-desc">Due Date (Latest First)</option>
+              <option value="priority-desc">Priority (High to Low)</option>
+              <option value="priority-asc">Priority (Low to High)</option>
+            </select>
+
+            <button id="resetFiltersBtn" class="btn-reset" title="Reset all filters">Reset</button>
+          </div>
+        </section>
+
+        <!-- Task Grid / Cards Container -->
+        <section id="taskGrid" class="task-grid">
+          <div class="empty-state">
+            <div class="empty-icon">⏳</div>
+            <h3 class="empty-title">Loading Tasks...</h3>
+            <p class="empty-desc">Fetching records from the database.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Create Task Modal -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Create New Task</h3>
+        <button class="modal-close" id="closeAddModalBtn">&times;</button>
+      </div>
+      <form id="addTaskForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="taskTitle">Task Title <span class="required">*</span></label>
+            <input type="text" id="taskTitle" class="form-input" placeholder="e.g., Prepare Java presentation slides" required maxlength="200">
+            <span class="form-error" id="titleError">Title is required.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="taskDesc">Description</label>
+            <textarea id="taskDesc" class="form-textarea" rows="3" placeholder="Add specific task notes or instructions..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="taskDueDate">Due Date <span class="required">*</span></label>
+              <input type="date" id="taskDueDate" class="form-input" required>
+              <span class="form-error" id="dateError">Due date is required.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="taskPriority">Priority</label>
+              <select id="taskPriority" class="form-select">
+                <option value="LOW">Low</option>
+                <option value="MEDIUM" selected>Medium</option>
+                <option value="HIGH">High</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="taskCategory">Category</label>
+              <select id="taskCategory" class="form-select">
+                <option value="PERSONAL">Personal</option>
+                <option value="EDUCATION" selected>Education</option>
+                <option value="WORK">Work</option>
+                <option value="SHOPPING">Shopping</option>
+                <option value="HEALTH">Health</option>
+                <option value="OTHERS">Others</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="taskStatus">Status</label>
+              <select id="taskStatus" class="form-select">
+                <option value="PENDING" selected>Pending</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancelAddBtn">Cancel</button>
+          <button type="submit" class="btn-primary">Save Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Task Modal -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Task</h3>
+        <button class="modal-close" id="closeEditModalBtn">&times;</button>
+      </div>
+      <form id="editTaskForm">
+        <input type="hidden" id="editTaskId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="editTaskTitle">Task Title <span class="required">*</span></label>
+            <input type="text" id="editTaskTitle" class="form-input" required maxlength="200">
+            <span class="form-error" id="editTitleError">Title is required.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="editTaskDesc">Description</label>
+            <textarea id="editTaskDesc" class="form-textarea" rows="3"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="editTaskDueDate">Due Date <span class="required">*</span></label>
+              <input type="date" id="editTaskDueDate" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editTaskPriority">Priority</label>
+              <select id="editTaskPriority" class="form-select">
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="editTaskCategory">Category</label>
+              <select id="editTaskCategory" class="form-select">
+                <option value="PERSONAL">Personal</option>
+                <option value="EDUCATION">Education</option>
+                <option value="WORK">Work</option>
+                <option value="SHOPPING">Shopping</option>
+                <option value="HEALTH">Health</option>
+                <option value="OTHERS">Others</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editTaskStatus">Status</label>
+              <select id="editTaskStatus" class="form-select">
+                <option value="PENDING">Pending</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancelEditBtn">Cancel</button>
+          <button type="submit" class="btn-primary">Update Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 style="color: #ef4444; display: flex; align-items: center; gap: 0.5rem;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          Confirm Delete
+        </h3>
+        <button class="modal-close" id="closeDeleteModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+          Are you sure you want to permanently delete <strong id="deleteTaskTitleDisplay" style="color: var(--text-primary);">this task</strong>?
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+          This action will permanently remove the record from your MySQL database.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="cancelDeleteBtn">Cancel</button>
+        <button type="button" class="btn-danger" id="confirmDeleteBtn">Delete Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript -->
+  <script src="js/tasks.js"></script>
+</body>
+</html>
+
