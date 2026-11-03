@@ -44,6 +44,10 @@ class TodoApplicationTests {
 
         Task completed = taskService.markTaskAsCompleted(saved.getId());
         assertNotNull(completed);
+
+        assertNotNull(taskService.getTaskStatistics(), "Statistics should be calculated");
+        assertNotNull(taskService.getRecentTasks(), "Recent tasks should be fetched");
+        assertNotNull(taskService.getUpcomingTasks(), "Upcoming tasks should be fetched");
     }
 }
 

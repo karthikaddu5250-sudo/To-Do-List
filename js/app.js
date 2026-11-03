@@ -229,7 +229,16 @@ async function loadRecentTasks() {
 
   } catch (error) {
     console.error('Error fetching recent tasks:', error);
-    recentTasksList.innerHTML = `<p style="color: #ef4444; padding: 1rem;">Failed to load recent tasks.</p>`;
+    recentTasksList.innerHTML = `
+      <div style="padding: 1.25rem; text-align: center; color: var(--text-muted);">
+        <p style="color: #ef4444; font-size: 0.88rem; margin-bottom: 0.6rem; font-weight: 500;">
+          ⚠️ Could not connect to Spring Boot server.
+        </p>
+        <button class="btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;" onclick="refreshDashboard()">
+          🔄 Retry Connection
+        </button>
+      </div>
+    `;
   }
 }
 
@@ -270,9 +279,25 @@ async function loadUpcomingTasks() {
 
   } catch (error) {
     console.error('Error fetching upcoming tasks:', error);
-    upcomingTasksList.innerHTML = `<p style="color: #ef4444; padding: 1rem;">Failed to load upcoming deadlines.</p>`;
+    upcomingTasksList.innerHTML = `
+      <div style="padding: 1.25rem; text-align: center; color: var(--text-muted);">
+        <p style="color: #ef4444; font-size: 0.88rem; margin-bottom: 0.6rem; font-weight: 500;">
+          ⚠️ Could not connect to Spring Boot server.
+        </p>
+        <button class="btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;" onclick="refreshDashboard()">
+          🔄 Retry Connection
+        </button>
+      </div>
+    `;
   }
 }
+
+// Global dashboard refresh function
+window.refreshDashboard = function() {
+  loadDashboardStats();
+  loadRecentTasks();
+  loadUpcomingTasks();
+};
 
 // =====================================================================
 // 7. Complete Task
